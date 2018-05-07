@@ -88,7 +88,7 @@ class Calendar extends Component {
                 style={containerStyle}>
               <div className={today} style={todayStyle}></div>
               <div className={selected} style={selectedStyle}></div>
-              <p onClick={ (ev) => {
+              <p style={{zIndex: 3, cursor: 'pointer'}} onClick={ (ev) => {
                 var day = ev.target.innerHTML;
                 this._onDatePicked(opts.month, day);
               }}>{opts.date.getDate()}</p>
