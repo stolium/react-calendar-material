@@ -5,10 +5,10 @@ import ic_back from './ic_back.svg';
 import ic_forward from './ic_forward.svg';
 
 const config = {
-    months: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
-    month_subs: ['Jan', 'Feb', 'Apr', 'Mar', 'June', 'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'],
-    weeks: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
-    week_subs: ['SU', 'MO', 'TU', 'WE', 'TH', 'FR', 'SA'],
+    months: ['januari', 'februari', 'mars', 'april', 'maj', 'juni', 'juli', 'augusti', 'september', 'oktober', 'november', 'december'],
+    month_subs: ['jan', 'feb', 'apr', 'mar', 'maj', 'jun', 'jul', 'aug', 'sep', 'okt', 'nov', 'dec'],
+    weeks: ['Söndag', 'Måndag', 'Tisdag', 'Onsdag', 'Torsdag', 'Fredag', 'Lördag'],
+    week_subs: ['Sö', 'Må', 'Ti', 'On', 'To', 'Fr', 'Lö'],
     today: function() {
       return new Date();
     }
@@ -28,6 +28,15 @@ class Calendar extends Component {
 
   componentWillMount() {
     this.updateMonth(0);
+  }
+
+  componentWillReceiveProps(nextProps){
+      let date = new Date();
+
+      if(typeof nextProps.selectedDate !== 'undefined'){
+          date = nextProps.selectedDate
+      }
+      this.setState({selected: date});
   }
 
   updateMonth(add) {
@@ -206,13 +215,15 @@ Calendar.propTypes = {
   onDatePicked: PropTypes.func,
   showHeader: PropTypes.bool,
   orientation: PropTypes.string,
+  selectedDate: PropTypes.instanceOf(Date)
 };
 
 Calendar.defaultProps = {
   accentColor: '#00C1A6',
   onDatePicked: function(){},
   showHeader: true,
-  orientation: 'flex-col'
+  orientation: 'flex-col',
+  selectedDate: function () {new Date()}()
 };
 
 export default Calendar;
