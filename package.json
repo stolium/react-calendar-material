@@ -4,7 +4,7 @@
   "description": "A react calendar borrowing heavily from google's material design",
   "main": "lib/index.js",
   "scripts": {
-    "install": "babel -d lib/ src/ --copy-files",
+    "install": "yarn install && babel -d lib/ src/ --copy-files",
     "build": "babel -d lib/ src/ --copy-files",
     "prepublish": "babel -d lib/ src/ --copy-files",
     "test": "echo \"Error: no test specified\" && exit 1"
