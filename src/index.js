@@ -1,13 +1,14 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import './index.css';
 import ic_back from './ic_back.svg';
 import ic_forward from './ic_forward.svg';
 
 const config = {
-    months: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
-    month_subs: ['Jan', 'Feb', 'Apr', 'Mar', 'June', 'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'],
-    weeks: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
-    week_subs: ['SU', 'MO', 'TU', 'WE', 'TH', 'FR', 'SA'],
+    months: ['januari', 'februari', 'mars', 'april', 'maj', 'juni', 'juli', 'augusti', 'september', 'oktober', 'november', 'december'],
+    month_subs: ['jan', 'feb', 'apr', 'mar', 'maj', 'jun', 'jul', 'aug', 'sep', 'okt', 'nov', 'dec'],
+    weeks: ['Söndag', 'Måndag', 'Tisdag', 'Onsdag', 'Torsdag', 'Fredag', 'Lördag'],
+    week_subs: ['Sö', 'Må', 'Ti', 'On', 'To', 'Fr', 'Lö'],
     today: function() {
       return new Date();
     }
@@ -21,12 +22,35 @@ class Calendar extends Component {
     this.state = {
       current: config.today(),
       selected: config.today(),
-      ldom: 30
+      ldom: 30,
+      start: config.today()
     };
   }
 
   componentWillMount() {
     this.updateMonth(0);
+  }
+
+  componentWillReceiveProps(nextProps){
+      const date = this.state.selected;
+      const start = this.state.start;
+
+      if(typeof nextProps.startDate !== undefined && nextProps.startDate !== null){
+        this.setState({start: nextProps.startDate})
+      }
+
+      if(typeof nextProps.selectedDate !== 'undefined'){
+        if(typeof nextProps.startDate !== undefined && nextProps.startDate !== null){
+          if (nextProps.startDate > nextProps.selectedDate) {
+            this.props.onDatePicked(nextProps.startDate);
+            this.setState({selected: nextProps.startDate});
+          } else {
+            this.setState({selected: nextProps.selectedDate});
+          }
+        } else {
+          this.setState({selected: nextProps.selectedDate});
+        }
+      }
   }
 
   updateMonth(add) {
@@ -82,12 +106,13 @@ class Calendar extends Component {
     }
 
     baseClasses += opts.current ? "" : " non-current";
-
+    containerStyle['position'] = 'relative';
     return (<div className={baseClasses}
                 style={containerStyle}>
+              {!opts.current && <div style={{position: 'absolute', height: '100%', width: '100%', zIndex: '9999'}}/>}  
               <div className={today} style={todayStyle}></div>
               <div className={selected} style={selectedStyle}></div>
-              <p onClick={ (ev) => {
+              <p style={{zIndex: 3, cursor: 'pointer'}} onClick={ (ev) => {
                 var day = ev.target.innerHTML;
                 this._onDatePicked(opts.month, day);
               }}>{opts.date.getDate()}</p>
@@ -95,6 +120,7 @@ class Calendar extends Component {
   }
 
   renderDays(copy) {
+    const today = this.state.start ? this.state.start : new Date(new Date().setDate(new Date().getDate()-1));
     var days = [];
 
     // set to beginning of month
@@ -122,6 +148,10 @@ class Calendar extends Component {
         inMonth = false;
       }
 
+      if(this.props.disablePreviousDates && (copy < today)) {
+        inMonth = false;
+      }
+
       var sel = new Date(this.state.selected.getTime());
       var isSelected = (sel.getFullYear() === copy.getFullYear() &&
           sel.getDate() === copy.getDate() &&
@@ -129,7 +159,7 @@ class Calendar extends Component {
 
       var isToday = (TODAY.getFullYear() === copy.getFullYear() &&
           TODAY.getDate() === copy.getDate() &&
-          TODAY.getMonth() === copy.getMonth());
+          TODAY.getMonth() === copy.getMonth());  
 
       days.push(this.renderDay({
         today: isToday,
@@ -138,6 +168,10 @@ class Calendar extends Component {
         month: (inMonth ? 0 : (lastMonth ? -1 : 1)),
         date: copy
       }));
+
+      if(this.props.disablePreviousDates && (copy < today)) {
+        inMonth = true;
+      }
     }
 
     return days;
@@ -205,13 +239,19 @@ Calendar.propTypes = {
   onDatePicked: PropTypes.func,
   showHeader: PropTypes.bool,
   orientation: PropTypes.string,
+  selectedDate: PropTypes.instanceOf(Date),
+  disablePreviousDates: PropTypes.bool,
+  startDate: PropTypes.instanceOf(Date)
 };
 
 Calendar.defaultProps = {
   accentColor: '#00C1A6',
   onDatePicked: function(){},
   showHeader: true,
-  orientation: 'flex-col'
+  orientation: 'flex-col',
+  selectedDate: function () {new Date()}(),
+  disablePreviousDates: false,
+  startDate: null
 };
 
 export default Calendar;

@@ -1,15 +1,17 @@
 {
   "name": "react-calendar-material",
-  "version": "0.1.6",
+  "version": "0.1.8",
   "description": "A react calendar borrowing heavily from google's material design",
   "main": "lib/index.js",
   "scripts": {
+    "install": "babel -d lib/ src/ --copy-files",
+    "build": "babel -d lib/ src/ --copy-files",
     "prepublish": "babel -d lib/ src/ --copy-files",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/icarus-sullivan/react-calendar-material"
+    "url": "https://github.com/stolium/react-calendar-material"
   },
   "keywords": [
     "react",
@@ -24,6 +26,13 @@
     "react": "^0.14.0 || ^15.0.1"
   },
   "devDependencies": {
+    "babel-cli": "^6.18.0",
+    "babel-preset-es2015": "^6.24.0",
+    "babel-preset-react": "^6.11.1",
+    "babel-preset-stage-1": "^6.13.0"
+  },
+  "dependencies": {
+    "prop-types": "^15.6.0",
     "babel-cli": "^6.18.0",
     "babel-preset-es2015": "^6.24.0",
     "babel-preset-react": "^6.11.1",

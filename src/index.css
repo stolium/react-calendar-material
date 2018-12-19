@@ -1,12 +1,3 @@
-@import url('https://fonts.googleapis.com/css?family=Open+Sans');
-
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-  /*border: 1px solid red;*/
-  font-family: 'Open Sans', sans-serif;
-}
 
 .container {
   max-width: 360px;
@@ -94,6 +85,9 @@
   font-weight: lighter;
 }
 
+
+
+
 .header-day {
   font-size: 4em;
   font-weight: bold;
@@ -171,7 +165,7 @@
   position: relative;
 }
 
-.day, p {
+.day {
   padding-left: 8px;
   padding-right: 8px;
 }
@@ -195,7 +189,7 @@
   border-radius: 15px;
   width: 30px;
   height: 30px;
-  z-index: -100;
+  z-index: 1;
 }
 
 
